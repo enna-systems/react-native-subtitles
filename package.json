@@ -30,7 +30,8 @@
     "refactor:check-unused-files": "npx unimported --flow",
     "git:commit": "func() { git add . && git commit -m \"[master] - $1\"; }; func",
     "git:push": "func() { git push; }; func",
-    "deploy": "npm run validate && npm t && npm run git:commit && npm version patch && npm run build && npm publish ./dist && npm run git:push"
+    "deploy": "npm run validate && npm t && npm run git:commit && npm version patch && npm run build && npm publish ./dist && npm run git:push",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "axios": "^0.27.2",
