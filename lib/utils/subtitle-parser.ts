@@ -8,7 +8,7 @@ import timeToSeconds from './time-to-seconds'
 const subtitleParser = async (subitleUrl: string): Promise<Subtitle[]> => {
   const { data: subtitleData } = await axios.get(subitleUrl)
 
-  const subtitleType = subitleUrl.split('.')[subitleUrl.split('.').length - 1]
+  const subtitleType = subitleUrl.split('.')[subitleUrl.split('.').length - 1].split('?')[0]
 
   const result: Subtitle[] = []
 
@@ -45,13 +45,12 @@ const subtitleParser = async (subitleUrl: string): Promise<Subtitle[]> => {
 
     parsedSubtitle.forEach(({ start, end, part }) => {
       // For some reason this library adds the index of the subtitle at the end of the part, so we cut it
+      const lastWord = part.split(' ').pop();
       result.push({
         start: start / 1000,
         end: end / 1000,
-        part: part.slice(
-          0,
-          part.length - part.split(' ')[part.split(' ').length - 1].length,
-        ),
+        //@ts-expect-error index is number, cut it, see: https://github.com/nriccar/react-native-subtitles/issues/7
+        part: isNaN(lastWord) ? part : part.slice(0, part.length - part.split(' ')[part.split(' ').length - 1].length),
       })
     })
   }
